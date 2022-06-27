@@ -10,8 +10,14 @@
 
   <po-toolbar p-title="Lista de Reembolso" [p-show-notification]="false"></po-toolbar>
 
-  <po-page-default>
-    <po-modal [p-title]="title" [p-primary-action]="primaryActions()" [p-secondary-action]="secondaryActions()">
-    </po-modal>
-  </po-page-default>
+  <po-page-dynamic-search p-title="Reembolsos">
+    <div class="switch">
+      <po-switch p-label="Ir para list-view" [p-label-on]="po_ligado" [p-label-off]="po_desligado" (p-change)="irListView($event)"></po-switch>
+    </div>
+    <div class="widget">
+      <app-widget [reembolso]="reembolso" [total]="total"></app-widget>
+    </div>
+    <po-table class="po-md-12 po-tabela" [p-columns]="colunasTabela" [p-items]="data"></po-table>
+  </po-page-dynamic-search>
+
 </div>

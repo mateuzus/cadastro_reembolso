@@ -1,1 +1,48 @@
-<p>list-view works!</p>
+<div class="po-wrapper">
+  <po-menu [p-collapsed]="collapsed" [p-filter]="filter" [p-menus]="menus">
+    <div *p-menu-header-template class="po-p-2 po-font-title sample-menu-header-text-color">
+      <p>Welcome,</p>
+      <p>
+        <b> {{ name_panel }} </b>
+      </p>
+    </div>
+  </po-menu>
+
+  <po-toolbar p-title="Lista de Reembolso" [p-show-notification]="false"></po-toolbar>
+
+  <po-page-default p-title="Reembolsos">
+    <div class="switch">
+      <po-switch p-label="Voltar para tabela" [p-label-on]="po_ligado" [p-label-off]="po_desligado"
+        (p-change)="irListView($event)" [(ngModel)]="po_switch"></po-switch>
+    </div>
+    <div class="widget">
+      <app-widget [reembolso]="reembolso" [total]="total"></app-widget>
+    </div>
+
+    <po-list-view p-property-title="solicitacao" [p-items]="data">
+      <ng-template p-list-view-content-template let-item>
+        <div class="po-row">
+          <po-info class="po-md-4" p-label="Num solicitação" [p-value]="item.solicitacao"></po-info>
+
+          <po-info class="po-md-4" p-label="Solicitante" [p-value]="item.solicitante"></po-info>
+
+          <po-info class="po-md-4" p-label="Descrição" [p-value]="item.descricao"></po-info>
+        </div>
+        <div class="po-row">
+          <po-info class="po-md-4" p-label="Valor Unit" [p-value]="item.vl_unit"></po-info>
+
+          <po-info class="po-md-4" p-label="Um" [p-value]="item.um"></po-info>
+
+          <po-info class="po-md-4" p-label="Valor Total" [p-value]="item.vl_total"></po-info>
+        </div>
+      </ng-template>
+
+      <ng-template p-list-view-detail-template let-item [p-show-detail]="showDetail">
+        <div class="po-row">
+          <po-info class="po-md-6" p-label="Observação" [p-value]="item.observacao"></po-info>
+        </div>
+      </ng-template>
+    </po-list-view>
+
+  </po-page-default>
+</div>

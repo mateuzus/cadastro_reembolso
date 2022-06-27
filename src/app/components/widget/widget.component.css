@@ -1,0 +1,14 @@
+.reembolso,
+.total {
+    width: 300px;
+}
+
+.sub {
+    font-weight: bold;
+    font-size: 40px;
+    color: red;
+}
+
+.title {
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
