@@ -1,8 +1,26 @@
+.filtro {
+    margin-top: 20px;
+}
+
+.cadastrar {
+    margin-left: 20px;
+}
+
 .widget {
     display: flex;
     justify-content: center;
 }
 
-.po-tabela {
-    margin-top: 30px;
+.tabela-reembolso {
+    margin-top: 40px;
+}
+
+.titulo {
+    text-align: center;
+    margin-top: 40px;
+    color: grey;
+}
+
+.tabela-descricao {
+    margin-top: 40px;
 }

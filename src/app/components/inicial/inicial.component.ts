@@ -1,3 +1,4 @@
+import { FiltroComponent } from './../filtro/filtro.component';
 import { Component, Output, OnInit, ViewChild } from '@angular/core';
 import { PoMenuItem, PoModalAction, PoModalComponent, PoTableColumn } from '@po-ui/ng-components';
 import { Router } from '@angular/router';
@@ -11,18 +12,20 @@ import { ReembolsoTabelaService } from 'src/app/services/reembolso-tabela.servic
 export class InicialComponent implements OnInit {
 
   @ViewChild(PoModalComponent) poModal!: PoModalComponent
+  @ViewChild(FiltroComponent) filtroComponent!: FiltroComponent
 
   collapsed: boolean = true
   filter: boolean = true
+  
 
   name_panel: string = sessionStorage.getItem('login') || ''
-  modal_type: string = ''
-  title: string = ''
+  tipo_modal: string = ''
+  titulo: string = ''
   po_ligado: string = 'Ligado'
   po_desligado: string = 'Desligado'
 
   @Output() reembolso: number = 0
-  @Output() total: any
+  @Output() total: number = 0
 
   menus: Array<PoMenuItem> = [
     {
@@ -39,42 +42,35 @@ export class InicialComponent implements OnInit {
     }
   ];
   colunasTabela: Array<PoTableColumn> = []
-  data: Array<any> = [
-    {
-      'id': '01',
-      'cod-despesa': '10',
-      'quantidade': '3',
-      'um': 'KM',
-      'valor-unitario': 'R$ 1,20',
-      'valor-total': 3.60,
-      'centro-custo': '1.2',
-      'user': 'datasul',
-      'observacoes': 'Km rodados para ir ao cliente'
-    },
-    {
-      'id': '02',
-      'cod-despesa': '10',
-      'quantidade': '3',
-      'um': 'KM',
-      'valor-unitario': 'R$ 2,20',
-      'valor-total': 6.60,
-      'centro-custo': '2.5',
-      'user': 'datasul',
-      'observacoes': 'Km rodados para ir ao cliente em Fortaleza'
-    }
-  ]
+  colunasDescricao: Array<PoTableColumn> = []
+  data: Array<any> = []
+  dataDescricao: Array<any> = []
+
+  //Variaveis para editar uma despesa
+  editarCodPrestacao: number = 0
+  editarCodDespesa: number = 0
+  editarQtd: number = 0
+  editarUn: string = ''
+  editarVlUnitario: number = 0
+  editarVlTotal: number = 0
+  editarData: string = ''
+  editarHora: string = ''
+  editarObs: string = ''
 
   constructor(private router: Router,
     private reembolsoService: ReembolsoTabelaService) { }
 
   ngOnInit(): void {
     this.carregarColunas()
-    this.calculoReembolsos()
-    this.addItemTabela()
+    this.filtroInicial()
+
+    /* let url = new URL(window.location.href);
+    console.log(url) */
   }
 
   carregarColunas() {
-    this.colunasTabela = this.reembolsoService.colunasTabelaReembolso(this)
+    this.colunasTabela = this.reembolsoService.colunasTabelaReembolso()
+    this.colunasDescricao = this.reembolsoService.colunasTabelaDescricao(this)
   }
 
   printMenuAction() {
@@ -86,15 +82,9 @@ export class InicialComponent implements OnInit {
     this.router.navigate(['/login'])
   }
 
-  openModal() {
-    this.modal_type = 'cadastro'
-    this.title = 'Cadastro de reembolso'
-    this.poModal.open()
-  }
-
   //Ações primárias
 
-  private primary_action_confirm_cadastro: PoModalAction = {
+  private acao_primaria_confirmar_editar: PoModalAction = {
     label: 'Confirmar',
     danger: false,
     action: () => {
@@ -102,9 +92,18 @@ export class InicialComponent implements OnInit {
     }
   }
 
+  private acao_primaria_confirmar_filtro: PoModalAction = {
+    label: 'Confirmar',
+    danger: false,
+    action: () => {
+      this.filtro()
+      this.poModal.close()
+    }
+  }
+
   //ações secundárias
 
-  private secondary_action_confirm_cadastro: PoModalAction = {
+  private acao_secundaria_fechar: PoModalAction = {
     label: 'Fechar',
     danger: true,
     action: () => {
@@ -112,18 +111,20 @@ export class InicialComponent implements OnInit {
     }
   }
 
-  primaryActions() {
+  acoesPrimarias() {
     let actions: any = {
-      cadastro: this.primary_action_confirm_cadastro
+      editar: this.acao_primaria_confirmar_editar,
+      filtro: this.acao_primaria_confirmar_filtro
     }
-    return actions[this.modal_type]
+    return actions[this.tipo_modal]
   }
 
-  secondaryActions() {
+  acoesSecundarias() {
     let actions: any = {
-      cadastro: this.secondary_action_confirm_cadastro
+      editar: this.acao_secundaria_fechar,
+      filtro: this.acao_secundaria_fechar
     }
-    return actions[this.modal_type]
+    return actions[this.tipo_modal]
   }
 
   irListView(evento: any): any {
@@ -132,29 +133,27 @@ export class InicialComponent implements OnInit {
     }
   }
 
-  calculoReembolsos() {
-    let totalData = this.data.length
-    this.reembolso = totalData
-    let total = 0
-
-    let filtro = this.data.map((item: any) => {
-      let valorTotal = item['valor-total']
-      total += valorTotal
-      this.total = total
-      this.total = total.toLocaleString('pt-br', { style: 'currency', currency: 'BRL' })
-      return this.total
-    })
-    console.log(filtro)
-  }
-
   addItemTabela() {
-    this.data = this.data.map((item: any) => {
+    this.dataDescricao = this.dataDescricao.map((item: any) => {
       item["actions"] = ["deletar", "editar"]
       return item
     })
   }
 
-  editar(linha: any) { }
+  editar(linha: any) {
+    this.editarCodPrestacao = linha["cod-prest"]
+    this.editarCodDespesa = linha["cod-desp"]
+    this.editarQtd = linha["quantidade"]
+    this.editarUn = linha["un"]
+    this.editarVlUnitario = linha["vl-unit-pad"]
+    this.editarVlTotal = linha["vl-tot"]
+    this.editarData = linha["data"]
+    this.editarHora = linha["hora"]
+    this.editarObs = linha["observacoes"]
+    this.titulo = 'Editar'
+    this.tipo_modal = 'editar'
+    this.poModal.open()
+  }
 
   deletar(linha: any) {
     let total = this.total
@@ -164,6 +163,62 @@ export class InicialComponent implements OnInit {
       this.total = total
       return item != linha
     })
+  }
+
+  carregarPrestContas() {
+  }
+
+  abrirModalFiltro() {
+    this.titulo = 'Filtro'
+    this.tipo_modal = 'filtro'
+    this.poModal.open()
+  }
+
+  abrirModalCadastrar() {
+    this.titulo = 'Cadastrar'
+    this.tipo_modal = 'cadastrar'
+    this.poModal.open()
+  }
+
+  filtroInicial() {
+    let parametros = {
+      "codigo-ini": 0,
+      "codigo-fim": 999999,
+      "dt-prest-ini": "2021-01-01",
+      "dt-prest-fim": "9999-12-31",
+      "sol-ini": "",
+      "sol-fim": "ZZZZZZZZZ",
+      "sit-ini": 1,
+      "sit-fim": 3
+    }
+    this.reembolsoService.prestContas(parametros, (item: any) => {
+      this.data = item.items[0].ds_prest['tt-prest-contas']
+    })
+  }
+
+  filtro() {
+    let parametros = {
+      "codigo-ini": this.filtroComponent.codIni,
+      "codigo-fim": this.filtroComponent.codFim,
+      "dt-prest-ini": this.filtroComponent.dataPrestIni,
+      "dt-prest-fim": this.filtroComponent.dataPrestFim,
+      "sol-ini": this.filtroComponent.solicitacaoIni,
+      "sol-fim": this.filtroComponent.solicitacaoFim,
+      "sit-ini": this.filtroComponent.situacaoIni,
+      "sit-fim": this.filtroComponent.situacaoFim
+    }
+    this.reembolsoService.prestContas(parametros, (item: any) => {
+      this.data = item.items[0].ds_prest['tt-prest-contas']
+    })
+  }
+
+  linhaSelecionada(linha: any) {
+    this.dataDescricao = linha['tt-prest-contas-desp']
+    this.addItemTabela()
+  }
+
+  limparDataDescricao() {
+    this.dataDescricao = []
   }
 }
 

@@ -11,13 +11,69 @@
   <po-toolbar p-title="Lista de Reembolso" [p-show-notification]="false"></po-toolbar>
 
   <po-page-dynamic-search p-title="Reembolsos">
-    <div class="switch">
-      <po-switch p-label="Ir para list-view" [p-label-on]="po_ligado" [p-label-off]="po_desligado" (p-change)="irListView($event)"></po-switch>
+
+    <div class="po-md-12 switch">
+      <po-switch p-label="Ir para list-view" [p-label-on]="po_ligado" [p-label-off]="po_desligado"
+        (p-change)="irListView($event)"></po-switch>
     </div>
-    <div class="widget">
+
+    <div class="po-md-12 filtro">
+      <po-button p-label="Filtro" p-type="primary" (p-click)="abrirModalFiltro()"></po-button>
+      <po-button class="cadastrar" p-label="Cadastrar reembolso" p-type="primary" (p-click)="abrirModalCadastrar()"></po-button>
+    </div>
+
+    <div class="po-md-12 widget">
       <app-widget [reembolso]="reembolso" [total]="total"></app-widget>
     </div>
-    <po-table class="po-md-12 po-tabela" [p-columns]="colunasTabela" [p-items]="data"></po-table>
-  </po-page-dynamic-search>
 
+    <div class="po-md-12 tabela-reembolso">
+      <po-table [p-columns]="colunasTabela" [p-items]="data" p-container="border" p-sort="true" p-striped="true"
+        p-hide-text-overflow="true" p-selectable="true" p-single-select="true" (p-selected)="linhaSelecionada($event)"
+        (p-unselected)="limparDataDescricao()">
+      </po-table>
+    </div>
+
+    <div class="po-md-12 titulo">
+      <p>Reembolsos Cadastrados</p>
+    </div>
+
+    <div class="po-md-12 tabela-descricao">
+      <po-table [p-columns]="colunasDescricao" [p-items]="dataDescricao" p-container="border" p-sort="true"
+        p-striped="true" p-hide-text-overflow="true"></po-table>
+    </div>
+
+    <po-modal [p-title]="titulo" [p-primary-action]="acoesPrimarias()" [p-secondary-action]="acoesSecundarias()">
+      <div *ngIf="tipo_modal === 'editar'">
+        <div class="cod">
+          <po-number class="po-md-6 po-sm-6" p-label="Cód. prestação" [(ngModel)]="editarCodPrestacao"></po-number>
+          <po-number class="po-md-6 po-sm-6" p-label="Cód. Despesa" [(ngModel)]="editarCodDespesa"></po-number>
+        </div>
+        <div class="qtd-un">
+          <po-number class="po-md-6 po-sm-6" p-label="Quantidade" [(ngModel)]="editarQtd"></po-number>
+          <po-input class="po-md-6 po-sm-6" p-label="UN" [(ngModel)]="editarUn"></po-input>
+        </div>
+        <div class="valor">
+          <po-decimal class="po-md-6 po-sm-6" p-label="Valor unitário" [(ngModel)]="editarVlUnitario"></po-decimal>
+          <po-decimal class="po-md-6 po-sm-6" p-label="Valor total" [(ngModel)]="editarVlTotal"></po-decimal>
+        </div>
+        <div class="data">
+          <po-input class="po-md-6 po-sm-6" p-label="Data" [(ngModel)]="editarData"></po-input>
+          <po-input class="po-md-6 po-sm-6" p-label="Hora" [(ngModel)]="editarHora"></po-input>
+        </div>
+        <div class="obs">
+          <po-textarea class="po-md-12 po-sm-12" p-label="Observações" [(ngModel)]="editarObs"></po-textarea>
+        </div>
+      </div>
+
+      <div *ngIf="tipo_modal === 'filtro'">
+        <app-filtro></app-filtro>
+      </div>
+
+      <div *ngIf="tipo_modal === 'cadastrar'">
+        
+      </div>
+
+    </po-modal>
+
+  </po-page-dynamic-search>
 </div>

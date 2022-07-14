@@ -13,6 +13,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CadastroComponent } from './components/cadastro/cadastro.component';
 import { ListViewComponent } from './components/list-view/list-view.component';
 import { WidgetComponent } from './components/widget/widget.component';
+import { FiltroComponent } from './components/filtro/filtro.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { WidgetComponent } from './components/widget/widget.component';
     InicialComponent,
     CadastroComponent,
     ListViewComponent,
-    WidgetComponent
+    WidgetComponent,
+    FiltroComponent
   ],
   imports: [
     BrowserModule,

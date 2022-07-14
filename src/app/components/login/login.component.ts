@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  sendLogin() {
+   sendLogin() {
     if (this.login === 'Mateus' && this.password === '123') {
       sessionStorage.setItem('login', this.login)
       sessionStorage.setItem('password', this.password)
