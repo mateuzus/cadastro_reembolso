@@ -7,8 +7,8 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class WidgetComponent implements OnInit {
 
-  @Input() reembolso: any
-  @Input() total: any
+  @Input() quantidade_reembolso: number = 0
+  @Input() total_reembolso: string = ''
 
   constructor() { }
 

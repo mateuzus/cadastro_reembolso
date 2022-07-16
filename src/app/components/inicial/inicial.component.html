@@ -19,22 +19,26 @@
 
     <div class="po-md-12 filtro">
       <po-button p-label="Filtro" p-type="primary" (p-click)="abrirModalFiltro()"></po-button>
-      <po-button class="cadastrar" p-label="Cadastrar reembolso" p-type="primary" (p-click)="abrirModalCadastrar()"></po-button>
+      <po-button class="cadastrar" p-label="Cadastrar detalhes" p-type="primary" (p-click)="abrirModalCadastrar()" [p-disabled]="btnCadastrar"></po-button>
     </div>
 
     <div class="po-md-12 widget">
-      <app-widget [reembolso]="reembolso" [total]="total"></app-widget>
+      <app-widget [quantidade_reembolso]="quantidade_reembolso" [total_reembolso]="total_reembolso"></app-widget>
+    </div>
+
+    <div class="po-md-12 titulo">
+      <p>Reembolsos cadastrados</p>
     </div>
 
     <div class="po-md-12 tabela-reembolso">
-      <po-table [p-columns]="colunasTabela" [p-items]="data" p-container="border" p-sort="true" p-striped="true"
+      <po-table [p-columns]="colunasTabela" [p-items]="dataReembolso" p-container="border" p-sort="true" p-striped="true"
         p-hide-text-overflow="true" p-selectable="true" p-single-select="true" (p-selected)="linhaSelecionada($event)"
-        (p-unselected)="limparDataDescricao()">
+        (p-unselected)="limparDataDescricao()" p-height="200">
       </po-table>
     </div>
 
     <div class="po-md-12 titulo">
-      <p>Reembolsos Cadastrados</p>
+      <p>Detalhes do reembolso</p>
     </div>
 
     <div class="po-md-12 tabela-descricao">
@@ -43,7 +47,7 @@
     </div>
 
     <po-modal [p-title]="titulo" [p-primary-action]="acoesPrimarias()" [p-secondary-action]="acoesSecundarias()">
-      <div *ngIf="tipo_modal === 'editar'">
+      <div *ngIf="tipo_modal === 'editardetalhe'">
         <div class="cod">
           <po-number class="po-md-6 po-sm-6" p-label="Cód. prestação" [(ngModel)]="editarCodPrestacao"></po-number>
           <po-number class="po-md-6 po-sm-6" p-label="Cód. Despesa" [(ngModel)]="editarCodDespesa"></po-number>
@@ -69,9 +73,10 @@
         <app-filtro></app-filtro>
       </div>
 
-      <div *ngIf="tipo_modal === 'cadastrar'">
-        
+      <div *ngIf="tipo_modal === 'cadastrardetalhe'">
+        <app-cadastro-detalhes [cod_prest]="cod_prest" [hora]="hora"></app-cadastro-detalhes>
       </div>
+
 
     </po-modal>
 

@@ -1,0 +1,29 @@
+<div class="cod-desp">
+  <po-number class="po-md-6" p-label="Código prestação" [(ngModel)]="cod_prest" p-disabled></po-number>
+  <po-number class="po-md-6" p-label="Situação" [(ngModel)]="cod_desp" p-disabled></po-number>
+</div>
+
+<div class="qtd-un">
+  <po-select class="po-md-6" p-label="UN / Despesa" [(ngModel)]="un" [p-options]="tp_despesa"
+    (ngModelChange)="trocaDespesas($event)"></po-select>
+  <po-decimal class="po-md-6" p-label="Valor unitário" [(ngModel)]="vl_unit" [p-disabled]="despesaKm"></po-decimal>
+</div>
+
+<div class="total-unit">
+  <po-number class="po-md-6" p-label="Quantidade" [(ngModel)]="quantidade" (p-blur)="calculoDespesa()"></po-number>
+  <po-decimal class="po-md-6" p-label="Valor total" [(ngModel)]="vl_total"></po-decimal>
+</div>
+
+<div class="data-hora">
+  <po-datepicker class="po-md-6" p-label="Data" [(ngModel)]="data"></po-datepicker>
+  <po-input class="po-md-6" p-label="Hora" [(ngModel)]="hora"></po-input>
+</div>
+
+<div class="obs">
+  <po-textarea class="po-md-12" p-label="Observações" [(ngModel)]="observacao" p-placeholder="Observações">
+  </po-textarea>
+</div>
+
+<div>
+  <po-loading-overlay p-screen-lock="true" p-text="Carregando" [hidden]="carregando"></po-loading-overlay>
+</div>

@@ -14,6 +14,8 @@ import { CadastroComponent } from './components/cadastro/cadastro.component';
 import { ListViewComponent } from './components/list-view/list-view.component';
 import { WidgetComponent } from './components/widget/widget.component';
 import { FiltroComponent } from './components/filtro/filtro.component';
+import { CadastroDetalhesComponent } from './components/cadastro-detalhes/cadastro-detalhes.component';
+import { EditarComponent } from './components/editar/editar.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { FiltroComponent } from './components/filtro/filtro.component';
     CadastroComponent,
     ListViewComponent,
     WidgetComponent,
-    FiltroComponent
+    FiltroComponent,
+    CadastroDetalhesComponent,
+    EditarComponent
   ],
   imports: [
     BrowserModule,

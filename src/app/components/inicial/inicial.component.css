@@ -1,26 +1,26 @@
 .filtro {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 .cadastrar {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
 .widget {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .tabela-reembolso {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 .titulo {
-    text-align: center;
-    margin-top: 40px;
-    color: grey;
+  text-align: center;
+  margin-top: 40px;
+  color: grey;
 }
 
 .tabela-descricao {
-    margin-top: 40px;
+  margin-top: 40px;
 }

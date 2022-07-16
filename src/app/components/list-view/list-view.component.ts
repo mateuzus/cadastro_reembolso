@@ -1,4 +1,4 @@
-import { Component, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { PoMenuItem } from '@po-ui/ng-components';
 import { ReembolsoTabelaService } from 'src/app/services/reembolso-tabela.service';
@@ -12,7 +12,7 @@ export class ListViewComponent implements OnInit {
 
   menus: Array<PoMenuItem> = [
     {
-      label: 'Cadastrar',
+      label: 'Cadastrar Tipo/Situação',
       action: this.printMenuAction.bind(this),
       icon: 'po-icon-edit',
       shortLabel: 'Cadastrar'
@@ -32,8 +32,8 @@ export class ListViewComponent implements OnInit {
   po_ligado: string = 'Ligado'
   po_desligado: string = 'Desligado'
 
-  @Output() reembolso: number = 0
-  @Output() total: number = 0
+  @Input() quantidade_reembolso: number = 0
+  @Output() total_reembolso: number = 0
 
   data: Array<any> = [
     {

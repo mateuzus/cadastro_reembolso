@@ -11,7 +11,7 @@ export class CadastroService {
 
   constructor(private http: HttpClient) { }
 
-  cadastrar(parametros?: any, sucess?: any, error?: any) {
+  cadastrarTipoSituacao(parametros?: any, sucess?: any, error?: any) {
     let url = this.urlApi + 'apisetprestconta'
 
     let headers_send = new HttpHeaders()
@@ -19,14 +19,27 @@ export class CadastroService {
     headers_send = headers_send.append("Content-Type", "application/json")
 
     let params: any = {
-      "metodo": 1,
-      "tt-prest-contas": [
-        parametros
-      ]
+      ...parametros
+    }
+  console.log(params)
+    return this.http.post(url, params, {
+      headers: headers_send,
+      responseType: 'json',
+      withCredentials: true
+    }).subscribe(sucess, error)
+  }
 
+  cadastrarDetalhes(parametros?: any, sucess?: any, error?: any) {
+    let url = this.urlApi + 'apisetprestcontadesp'
+
+    let headers_send = new HttpHeaders()
+    headers_send = headers_send.append("Authorization", "Basic " + btoa("aluno:aluno#2022"))
+    headers_send = headers_send.append("Content-Type", "application/json")
+
+    let params: any = {
+      ...parametros
     }
     console.log(params)
-
     return this.http.post(url, params, {
       headers: headers_send,
       responseType: 'json',

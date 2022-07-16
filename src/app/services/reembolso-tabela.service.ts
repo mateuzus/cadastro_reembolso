@@ -12,8 +12,40 @@ export class ReembolsoTabelaService {
 
   constructor(private http: HttpClient) { }
 
-  colunasTabelaReembolso(): Array<PoTableColumn> {
+  colunasTabelaReembolso(component_instance: any): Array<PoTableColumn> {
     return [
+      {
+        property: "actions",
+        label: "Ações",
+        type: "icon",
+        width: '80px',
+        icons: [
+          {
+            action: (value: any, row: any) => {
+              component_instance.deletarReembolso(
+                value,
+                row
+              )
+            },
+            color: "primary",
+            icon: "po-icon po-icon-delete",
+            tooltip: "Clique aqui para deletar",
+            value: "deletar"
+          },
+          {
+            action: (value: any, row: any) => {
+              component_instance.abrirModalEditarReembolso(
+                value,
+                row
+              )
+            },
+            color: "primary",
+            icon: "po-icon po-icon-edit",
+            tooltip: "Clique aqui para editar",
+            value: "editar"
+          }
+        ]
+      },
       { property: 'cod-prest', label: 'Cód. Prestação' },
       { property: 'ind-sit', label: 'Ind. da Situação' },
       { property: 'sc-codigo', label: 'Cód. Centro de Custo' },
@@ -31,7 +63,7 @@ export class ReembolsoTabelaService {
         icons: [
           {
             action: (value: any, row: any) => {
-              component_instance.deletar(
+              component_instance.deletarDetalhes(
                 value,
                 row
               )
@@ -43,7 +75,7 @@ export class ReembolsoTabelaService {
           },
           {
             action: (value: any, row: any) => {
-              component_instance.editar(
+              component_instance.abrirModalEditarDetalhes(
                 value,
                 row
               )
@@ -98,7 +130,7 @@ export class ReembolsoTabelaService {
     let params: any = {
       "tt-p-cc": parametros
     }
-    
+
     return this.http.post(url, params, {
       headers: headers_send,
       responseType: 'json',
